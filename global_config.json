@@ -1,0 +1,29 @@
+{
+    "project":{
+        "name": "",
+        "folders":{
+            "dev":{
+                "name": "src",
+                "css":{
+                    "type": "sass",
+                    "map": true
+                },
+                "js":{
+                    
+                },
+                "assets":{
+                    
+                }
+            },
+            "prod":{
+                "name": "dist"
+            }
+        },
+        "componentsConfig":{
+            "config": "",
+            "components":{
+                "inputs": true
+            }
+        }
+    }
+}

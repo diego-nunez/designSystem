@@ -1,0 +1,31 @@
+{
+  "name": "designSystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rocioOrtiz/designSystem.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rocioOrtiz/designSystem/issues"
+  },
+  "homepage": "https://github.com/rocioOrtiz/designSystem#readme",
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-live-server": "0.0.31"
+  },
+  "devDependencies": {
+    "colors": "^1.4.0",
+    "gulp-prompt": "^1.2.0",
+    "gulp-sass": "^4.1.0",
+    "inquirer": "^7.3.3",
+    "node-sass": "^5.0.0"
+  }
+}

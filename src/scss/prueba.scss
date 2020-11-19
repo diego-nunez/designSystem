@@ -1,0 +1,9 @@
+body{
+    background: red;
+    &::after{
+        content: ' ';
+        color: blue;
+        padding: 0;
+        margin: 0;;
+    }
+}
