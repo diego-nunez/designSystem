@@ -3,9 +3,12 @@
 var gulp = require('gulp'),
     file_system = require('fs'),
     config_file = './global_config.json',
+    modules_config_file = '',
     sass = require('gulp-sass'),
     colorTerminal = require('colors'),
     inquirer = require('inquirer');
+
+const https = require('https');
 
 var messages = function(type,texto){
     
@@ -42,7 +45,8 @@ var principalFolders = function(){
     file_system.readFile( config_file, 'utf-8', (err, data) => {
         if (err) throw err;
         var config_info = JSON.parse(data);
-        
+        modules_config_file = config_info.project.componentsConfig.config;
+
         var createStructure = function(){
             if(typeof config_info != 'object') throw "no es un Json"
 
@@ -82,10 +86,37 @@ var principalFolders = function(){
         } catch(e){
             messages('error', e.answer)
         }
-        
+
+        modulesConfig();
     });
 }
+
+var modulesConfig = function(){
+    console.log(modules_config_file,'modules_config_file');
+    https.get(modules_config_file,(res) => {
+        let body = "";
+    
+        res.on("data", (chunk) => {
+            body += chunk;
+        });
+    
+        res.on("end", () => {
+            try {
+                let json = JSON.parse(body);
+                // do something with JSON
+                console.log(json,'json');
+            } catch (error) {
+                messages("error",error.message);
+            };
+        });
+    
+    }).on("error", (error) => {
+        messages("error",error.message);
+    });
+    
+}
 principalFolders();
+
 
 gulp.task('components',async ()=>{
     inquirer

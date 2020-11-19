@@ -1,5 +1,5 @@
 {
-    "modulse":{
+    "moduls":{
         "custom_inputs":{
             "js": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/js/customInputs.js",
             "scss": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/utils/_inputsCustomize.scss?token=AOS6NM7NPTOTDLKPHQCIUDS7WYMV2"

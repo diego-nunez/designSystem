@@ -20,7 +20,7 @@
             }
         },
         "componentsConfig":{
-            "config": "",
+            "config": "https://raw.githubusercontent.com/rocioOrtiz/designSystem/main/modulesConfig.json",
             "components":{
                 "inputs": true
             }
