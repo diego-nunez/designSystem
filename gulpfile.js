@@ -136,16 +136,14 @@ var modulesConfig = function(){
                             urlFile = json['moduls'][element][subElement],
                             fileName = path.basename(urlFile),
                             fullFileRoute = `${fullComponentRoute}/${fileName}`;
-                            
-                        if(!file_system.existsSync(fullComponentRoute)){
-                            file_system.mkdirSync(fullComponentRoute);
+                        
                             https.get(json['moduls'][element][subElement], response => {
                                     
                                 if(!file_system.existsSync(fullFileRoute)) response.pipe(file_system.createWriteStream(fullFileRoute))
                                 
                             }); 
                             if(!componentStatus) messages("success",`Se creo el componente ${componentName} con éxito`); componentStatus = true;
-                        } 
+                       
                     })
                 })
                 
@@ -197,12 +195,12 @@ if(!isFolder) principalFolders();
 // })
 // //     sass.compiler = require('node-sass');
 
-// //     gulp.task('sass',() =>{
-// //         gulp.src('./src/**/*.scss')
-// //             .pipe(sass().on('error', sass.logError))
-// //             .pipe(gulp.dest('./css'));
-// //     })
+    gulp.task('sass',() =>{
+        gulp.src('./src/**/*.scss')
+            .pipe(sass().on('error', sass.logError))
+            .pipe(gulp.dest('./css'));
+    })
 
-// //    gulp.task('sass:watch', () =>{
-// //        gulp.watch('./src/**/*.scss',gulp.series(['sass']));
-// //    })
+   gulp.task('sass:watch', () =>{
+       gulp.watch('./src/**/*.scss',gulp.series(['sass']));
+   })
