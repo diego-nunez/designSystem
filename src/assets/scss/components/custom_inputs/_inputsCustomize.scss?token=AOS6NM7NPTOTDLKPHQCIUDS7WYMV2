@@ -1,0 +1,191 @@
+//generales
+.CE__element{
+    &--hidden{
+        height: 0;
+        overflow: hidden;
+    }
+    &--d-none{
+        display: none;
+    }
+}
+
+// select
+.CE-select{
+   
+    &__label, &__label--result{
+        display: inline-block;
+        width: 90%;
+        padding: 0 10px;
+        min-height: 23px;
+    }
+    &__arrow{
+        display: inline-block;
+        width: 10%;
+        text-align: center;
+    }
+    &__select{
+        border: 1px solid;
+        display: block;
+        max-width: 250px;
+        width: 100%;
+        overflow: hidden;
+        border-radius: 4px;
+        &--selected{
+            padding: 6px 0;
+            display: flex;
+            max-width: 250px;
+            position: relative;
+        }
+        ul{
+            max-height: 0;
+            list-style: none;
+            overflow: hidden;
+            padding: 0 10px;
+            transition: max-height 0.15s ease-in;
+            &::before, &::after{
+                content: ' ';
+                display: block;
+                width: 100%;     
+                height: 10px;
+            }
+        }
+        &--open{
+            ul{
+                max-height: 300px;
+                transition: max-height 0.15s ease-out;
+            }
+            .CE-select__arrow{
+                transform: scaleY(-1);
+            }
+        }
+    }
+    &__item--float{
+        position: relative;
+        display: inline-block;
+        margin: 20px 0 0;
+        overflow: initial;
+        .CE-select__label--float{
+            position: absolute;
+            top: 0;
+            transition: all 0.15s ease-in;
+            padding-left: 10px;
+            height: 100%;
+            line-height: 250%;
+        }
+        
+        
+    }
+    &__float{
+        &--active{
+            .CE-select__label--float{
+                transition: all 0.15s ease-in;
+                top: -35px;
+                padding-left: 0;
+            }
+        }
+    }
+   
+}
+
+.CE-check{
+    &__checkbox{
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+        margin-right: 10px;
+        position: relative;
+        border: 1px solid;
+    }
+    &__radio{
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+        margin-right: 10px;
+        position: relative;
+        border: 1px solid;
+        border-radius: 50%;
+    }
+    &__label{
+        display: inline-block;
+        vertical-align: middle;
+    }
+    input:checked{
+        &+.CE-check__checkbox{
+            &::before{
+                content: ' ';
+                display: block;
+                background: blue;
+                width: 12px;
+                height: 12px;
+                position: absolute;
+                transform: translate(-50%,-50%);
+                left: 50%;
+                top: 50%;
+            }
+            
+        }
+        +.CE-check__radio{
+            &::before{
+                content: ' ';
+                display: block;
+                background: blue;
+                width: 12px;
+                height: 12px;
+                position: absolute;
+                transform: translate(-50%,-50%);
+                left: 50%;
+                top: 50%;
+                border-radius: 50%;
+            }
+            
+        }
+    }
+    
+}
+
+.CE-item{
+    
+    &__label{
+        &--float{
+            position: absolute;
+            left: 0px;
+            transition: all 0.15s ease-in;
+            width: 100%;
+            height: 100%;
+            padding-left: 10px;
+            z-index: 3;
+        }
+        &--active{
+            left: 0;
+            top: -25px;
+            transition: all 0.15s ease-in;
+        }
+    }
+    &__float{
+        position: relative;
+        display: inline-block;
+        margin: 20px 0 0;
+        .CE-item__label{
+            &--input{
+                line-height: 200%;
+            }
+            &--textarea{
+                top: 0px;
+                line-height: 1;
+                padding-top: 10px;
+            }
+            &--active{
+                left: 0;
+                top: -25px;
+                padding: 0;
+                height: auto;
+                line-height: 1;
+                transition: all 0.15s ease-in;
+            }
+        }
+        
+    }
+    
+}

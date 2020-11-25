@@ -1,7 +1,0 @@
-body {
-  background: red; }
-  body::after {
-    content: ' ';
-    color: blue;
-    padding: 0;
-    margin: 0; }

@@ -4,15 +4,15 @@
         "folders":{
             "dev":{
                 "name": "src",
-                "css":{
-                    "type": "sass",
-                    "map": true
-                },
-                "js":{
-                    
-                },
                 "assets":{
-                    
+                    "scss":{
+                        "type": "sass",
+                        "map": true
+                    },
+                    "js":{
+                        
+                    }, 
+                    "img":{}
                 }
             },
             "prod":{
@@ -20,10 +20,7 @@
             }
         },
         "componentsConfig":{
-            "config": "https://raw.githubusercontent.com/rocioOrtiz/designSystem/main/modulesConfig.json",
-            "components":{
-                "inputs": true
-            }
+            "config": "https://raw.githubusercontent.com/rocioOrtiz/designSystem/main/modulesConfig.json"
         }
     }
 }

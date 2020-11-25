@@ -6,7 +6,11 @@ var gulp = require('gulp'),
     modules_config_file = '',
     sass = require('gulp-sass'),
     colorTerminal = require('colors'),
-    inquirer = require('inquirer');
+    path = require("path"),
+    inquirer = require('inquirer'),
+    isFolder = false,
+    config_info = {},
+    foldersRoutes = [];
 
 const https = require('https');
 
@@ -35,7 +39,7 @@ var messages = function(type,texto){
         custom: [messageDetails[type]['color'],messageDetails[type]['style']]
       });
 
-    consolelog(texto);
+    consolelog(texto.custom);
 }
 
 
@@ -44,9 +48,10 @@ var principalFolders = function(){
     
     file_system.readFile( config_file, 'utf-8', (err, data) => {
         if (err) throw err;
-        var config_info = JSON.parse(data);
-        modules_config_file = config_info.project.componentsConfig.config;
-
+        var assetsFolder='';
+            config_info = JSON.parse(data),
+            modules_config_file = config_info.project.componentsConfig.config;
+            
         var createStructure = function(){
             if(typeof config_info != 'object') throw "no es un Json"
 
@@ -68,13 +73,27 @@ var principalFolders = function(){
                     messages('success', `La carpeta ${folders[element]['name']} se ha creado correctamente`);
                 }
                
+
                 if (file_system.existsSync(folders[element]['name'])) {
-                    Object.keys(folders[element]).forEach( (subElement, index ) => {
-                        if(subElement != 'name'){
-                            if(!file_system.existsSync(folders[element]['name']+'/'+subElement)) file_system.mkdirSync(folders[element]['name']+'/'+subElement);
-                            messages('info', `La carpeta ${folders[element]['name']+'/'+subElement} ya existe`);
-                        }
-                    })
+                    assetsFolder = folders[element]['name']+'/assets';
+                    foldersRoutes.push(assetsFolder);
+
+                    if(!file_system.existsSync(assetsFolder)) file_system.mkdirSync(assetsFolder);
+                    if(folders[element]['assets'] != undefined){
+
+                        Object.keys(folders[element]['assets']).forEach( (subElement, index ) => {
+                            var subElementFolder = `${assetsFolder}/${subElement}`;
+                            
+
+                            if(!file_system.existsSync(subElementFolder)){
+                                file_system.mkdirSync(subElementFolder);
+                                messages('success', `La carpeta ${subElementFolder} se ha creado correctamente`);
+                            }else{
+                                messages('info', `La carpeta ${subElementFolder} ya existe`);
+                            }
+                            if(!file_system.existsSync(`${subElementFolder}/components`)) file_system.mkdirSync(`${subElementFolder}/components`);
+                        })
+                    }
                 }
                     
             })
@@ -83,16 +102,19 @@ var principalFolders = function(){
        
         try{
             createStructure();
+            isFolder = true;
+            modulesConfig();
         } catch(e){
             messages('error', e.answer)
         }
 
-        modulesConfig();
+       
     });
 }
 
 var modulesConfig = function(){
-    console.log(modules_config_file,'modules_config_file');
+    console.log(foldersRoutes[0],'modules_config_file');
+    let devFolder = foldersRoutes[0];
     https.get(modules_config_file,(res) => {
         let body = "";
     
@@ -104,7 +126,27 @@ var modulesConfig = function(){
             try {
                 let json = JSON.parse(body);
                 // do something with JSON
-                console.log(json,'json');
+                // console.log(json,'json');
+                // file_system.readFile( json, 'utf-8', (err, data) => {
+
+                // })
+                Object.keys(json['moduls']).forEach( (element, index, key ) => {
+                    console.log(key[index],'keyj');
+                    let componentName = key[index];
+                    Object.keys(json['moduls'][element]).forEach( (subElement, index, key) => {
+                        let fullComponentRoute = `${devFolder}/${key[index]}/components/${componentName}`,
+                            urlFile = json['moduls'][element][subElement],
+                            fileName = path.basename(urlFile),
+                            file = file_system.createWriteStream(`${fullComponentRoute}/${fileName}`);
+
+                        if(!file_system.existsSync(fullComponentRoute)) file_system.mkdirSync(fullComponentRoute);
+                        https.get(json['moduls'][element][subElement], response => {
+                            response.pipe(file);
+                        });
+                        
+                    })
+                })
+                messages("success","Se crearon los componentes con éxito");
             } catch (error) {
                 messages("error",error.message);
             };
@@ -115,41 +157,42 @@ var modulesConfig = function(){
     });
     
 }
-principalFolders();
+if(!isFolder) principalFolders();
 
 
-gulp.task('components',async ()=>{
-    inquirer
-    .prompt([
-        {
-            type: 'checkbox',
-            message: 'Select components',
-            name: 'components',
-            choices: [
-                {
-                name: 'Custom Inputs',
-                },
-                {
-                name: 'Sliders',
-                },
-                {
-                name: 'Modals',
-                }
-            ],
-            validate: function (answer) {
-                if (answer.length < 1) {
-                return 'You must choose at least one topping.';
-                }
+// gulp.task('components',async ()=>{
+//     inquirer
+//     .prompt([
+//         {
+//             type: 'checkbox',
+//             message: 'Select components',
+//             name: 'components',
+//             choices: [
+//                 {
+//                 name: 'Custom Inputs',
+//                 },
+//                 {
+//                 name: 'Sliders',
+//                 },
+//                 {
+//                 name: 'Modals',
+//                 }
+//             ],
+//             validate: function (answer) {
+//                 if (answer.length < 1) {
+//                 return 'You must choose at least one topping.';
+//                 }
 
-                return true;
-            },
-        },
-    ])
-    .then((answers) => {
-        console.log(JSON.stringify(answers, null, '  '));
-    });
+//                 return true;
+//             },
+//         },
+//     ])
+//     .then((answers) => {
+//         console.log(JSON.stringify(answers, null, '  '));
+//         modulesConfig();
+//     });
     
-})
+// })
 // //     sass.compiler = require('node-sass');
 
 // //     gulp.task('sass',() =>{
