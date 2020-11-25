@@ -125,28 +125,30 @@ var modulesConfig = function(){
         res.on("end", () => {
             try {
                 let json = JSON.parse(body);
-                // do something with JSON
-                // console.log(json,'json');
-                // file_system.readFile( json, 'utf-8', (err, data) => {
-
-                // })
+                
                 Object.keys(json['moduls']).forEach( (element, index, key ) => {
-                    console.log(key[index],'keyj');
-                    let componentName = key[index];
+
+                    let componentName = key[index],
+                        componentStatus = false;
                     Object.keys(json['moduls'][element]).forEach( (subElement, index, key) => {
-                        let fullComponentRoute = `${devFolder}/${key[index]}/components/${componentName}`,
+                        let componentRoute = `${devFolder}/${key[index]}/components`,
+                            fullComponentRoute = `${componentRoute}/${componentName}`,
                             urlFile = json['moduls'][element][subElement],
                             fileName = path.basename(urlFile),
-                            file = file_system.createWriteStream(`${fullComponentRoute}/${fileName}`);
-
-                        if(!file_system.existsSync(fullComponentRoute)) file_system.mkdirSync(fullComponentRoute);
-                        https.get(json['moduls'][element][subElement], response => {
-                            response.pipe(file);
-                        });
-                        
+                            fullFileRoute = `${fullComponentRoute}/${fileName}`;
+                            
+                        if(!file_system.existsSync(fullComponentRoute)){
+                            file_system.mkdirSync(fullComponentRoute);
+                            https.get(json['moduls'][element][subElement], response => {
+                                    
+                                if(!file_system.existsSync(fullFileRoute)) response.pipe(file_system.createWriteStream(fullFileRoute))
+                                
+                            }); 
+                            if(!componentStatus) messages("success",`Se creo el componente ${componentName} con éxito`); componentStatus = true;
+                        } 
                     })
                 })
-                messages("success","Se crearon los componentes con éxito");
+                
             } catch (error) {
                 messages("error",error.message);
             };

@@ -3,6 +3,10 @@
         "custom_inputs":{
             "js": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/js/customInputs.js",
             "scss": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/utils/_inputsCustomize.scss"
+        },
+        "custom_loader":{
+            "js":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/js/customloader.js",
+            "css":"https://github.com/rocioOrtiz/components/blob/main/loader/src/assets/scss/utils/_loaderCustomize.scss"
         }
     }
 }
