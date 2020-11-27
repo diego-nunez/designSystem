@@ -7,7 +7,7 @@
         "custom_loader":{
             "js":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/js/customloader.js",
             "scss":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/scss/utils/_loaderCustomize.scss",
-            "pug": "https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/pug/components/element.pug"
+            "pug": "https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/pug/components/loaderCustomize.pug"
         }
     }
 }
