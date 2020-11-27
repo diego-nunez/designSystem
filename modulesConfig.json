@@ -1,13 +1,13 @@
 {
     "moduls":{
         "custom_inputs":{
-            "assets/js": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/js/customInputs.js",
-            "assets/scss": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/utils/_inputsCustomize.scss"
+            "js": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/js/customInputs.js",
+            "scss": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/utils/_inputsCustomize.scss"
         },
         "custom_loader":{
-            "assets/js":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/js/customloader.js",
-            "assets/scss":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/scss/utils/_loaderCustomize.scss",
-            "pug/components": "https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/pug/components/element.pug"
+            "js":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/js/customloader.js",
+            "scss":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/scss/utils/_loaderCustomize.scss",
+            "pug": "https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/pug/components/element.pug"
         }
     }
 }
