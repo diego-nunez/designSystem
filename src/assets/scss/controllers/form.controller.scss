@@ -1,0 +1,50 @@
+@import '../components/_inputsGeneral';
+@import '../components/_general_items';
+@import '../components/_select';
+@import '../components/_radio_checkbox';
+
+* {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+/* Remove default padding */
+ul{
+  padding: 0;
+}
+
+.container{
+    max-width: 600px;
+    width: 90%;
+    margin: 20px auto;
+}
+form{
+    font-family: 'Quicksand', sans-serif;
+}
+fieldset{
+    border: none;
+}
+
+input, textarea{
+    border: 1px solid gray;
+    width: 100%;
+  }
+  
+.clearBoth{
+margin: 0 0 30px;
+}
+.customClass{
+    height: 35px;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.customizeInput{
+    width: 100%;
+    border-radius: 5px;
+}
+
+h1{
+    font-family: 'Do Hyeon', sans-serif;
+    font-size: 40px;
+}

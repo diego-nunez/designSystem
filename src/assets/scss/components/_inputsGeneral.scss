@@ -1,0 +1,11 @@
+//estilos generales Input
+
+.CE__element{
+    &--hidden{
+        height: 0;
+        overflow: hidden;
+    }
+    &--d-none{
+        display: none;
+    }
+}

@@ -1,18 +1,22 @@
 'use strict';
 
 var gulp = require('gulp'),
+    pug = require('gulp-pug'),
     file_system = require('fs'),
     config_file = './global_config.json',
     modules_config_file = '',
     sass = require('gulp-sass'),
     colorTerminal = require('colors'),
+    rename = require("gulp-rename"),
     path = require("path"),
     inquirer = require('inquirer'),
     isFolder = false,
     config_info = {},
-    foldersRoutes = [];
+    foldersRoutes = [],
+    https = require('https'),
+    browserSync = require('browser-sync').create();
 
-const https = require('https');
+    sass.compiler = require('node-sass');
 
 var messages = function(type,texto){
     
@@ -38,7 +42,8 @@ var messages = function(type,texto){
     colorTerminal.setTheme({
         custom: [messageDetails[type]['color'],messageDetails[type]['style']]
       });
-
+    
+    // no borrar
     consolelog(texto.custom);
 }
 
@@ -51,7 +56,7 @@ var principalFolders = function(){
         var assetsFolder='';
             config_info = JSON.parse(data),
             modules_config_file = config_info.project.componentsConfig.config;
-            
+          
         var createStructure = function(){
             if(typeof config_info != 'object') throw "no es un Json"
 
@@ -65,7 +70,7 @@ var principalFolders = function(){
                 try {
                     file_system.accessSync(folders[element]['name'], file_system.F_OK);
                     statusFolder.push(index);
-                    messages('info', `La carpeta ${folders[element]['name']} ya existe`);
+                    // messages('info', `La carpeta ${folders[element]['name']} ya existe`);
                   }
                 catch (e){//Crear el folder
                     file_system.mkdirSync(folders[element]['name']);
@@ -73,37 +78,42 @@ var principalFolders = function(){
                     messages('success', `La carpeta ${folders[element]['name']} se ha creado correctamente`);
                 }
                
-
                 if (file_system.existsSync(folders[element]['name'])) {
-                    assetsFolder = folders[element]['name']+'/assets';
-                    foldersRoutes.push(assetsFolder);
+                    
+                    // console.log(foldersRoutes, Object.keys(folders[element]),"folders[element]['name']");
+                    Object.keys(folders[element]).forEach((folder, index ) => {
+                        if(folder != 'name'){
+                            assetsFolder = `${folders[element]['name']}/${folder}`;
+                             foldersRoutes.push(assetsFolder);
 
-                    if(!file_system.existsSync(assetsFolder)) file_system.mkdirSync(assetsFolder);
-                    if(folders[element]['assets'] != undefined){
-
-                        Object.keys(folders[element]['assets']).forEach( (subElement, index ) => {
-                            var subElementFolder = `${assetsFolder}/${subElement}`;
-                            
-
-                            if(!file_system.existsSync(subElementFolder)){
-                                file_system.mkdirSync(subElementFolder);
-                                messages('success', `La carpeta ${subElementFolder} se ha creado correctamente`);
-                            }else{
-                                messages('info', `La carpeta ${subElementFolder} ya existe`);
+                            if(!file_system.existsSync(assetsFolder)) file_system.mkdirSync(assetsFolder);
+                       
+                            if(folders[element][folder] != undefined){
+        
+                                Object.keys(folders[element][folder]).forEach( (subElement, index ) => {
+                                    var subElementFolder = `${assetsFolder}/${subElement}`;
+                                    
+                                    
+                                    if(!file_system.existsSync(subElementFolder)){
+                                        file_system.mkdirSync(subElementFolder);
+                                        messages('success', `La carpeta ${subElementFolder} se ha creado correctamente`);
+                                    }
+                                    if(!file_system.existsSync(`${subElementFolder}/components`) && folder == 'assets') file_system.mkdirSync(`${subElementFolder}/components`);
+                                })
                             }
-                            if(!file_system.existsSync(`${subElementFolder}/components`)) file_system.mkdirSync(`${subElementFolder}/components`);
-                        })
-                    }
+                        }
+                    })
                 }
                     
             })
             
         }
-       
+
         try{
             createStructure();
             isFolder = true;
             modulesConfig();
+            
         } catch(e){
             messages('error', e.answer)
         }
@@ -113,8 +123,7 @@ var principalFolders = function(){
 }
 
 var modulesConfig = function(){
-    console.log(foldersRoutes[0],'modules_config_file');
-    let devFolder = foldersRoutes[0];
+    let devFolder = foldersRoutes;
     https.get(modules_config_file,(res) => {
         let body = "";
     
@@ -130,19 +139,29 @@ var modulesConfig = function(){
 
                     let componentName = key[index],
                         componentStatus = false;
+                        // console.log(json['moduls'][element],"json['moduls'][element]");
                     Object.keys(json['moduls'][element]).forEach( (subElement, index, key) => {
-                        let componentRoute = `${devFolder}/${key[index]}/components`,
-                            fullComponentRoute = `${componentRoute}/${componentName}`,
-                            urlFile = json['moduls'][element][subElement],
-                            fileName = path.basename(urlFile),
-                            fullFileRoute = `${fullComponentRoute}/${fileName}`;
-                        
-                            https.get(json['moduls'][element][subElement], response => {
+                        Object.keys(json['moduls'][element][subElement]).forEach( (moduleFile, index, key) => {
+                            let urlFile = json['moduls'][element][subElement][moduleFile],
+                                fileType = path.extname(urlFile).substr(1),
+                                devFolderType = (fileType == 'pug')? devFolder[0]: `${devFolder[1]}/${fileType}`,
+                                // parentFolder = (fileType == 'pug')? ``:`${key[index]}/`,
+                                componentRoute = `${devFolderType}/components`,
+                                fileName = path.basename(urlFile),
+                                fullFileRoute = `${componentRoute}/${fileName}`;
+
+                                https.get(urlFile, response => {
+                                        
+                                    if(!file_system.existsSync(fullFileRoute)) {
+                                        response.pipe(file_system.createWriteStream(fullFileRoute));
+                                        if(!componentStatus) messages("success",`Se creo el componente ${componentName} con éxito`); componentStatus = true;
+                                        componentStatus = true;
+                                    }
                                     
-                                if(!file_system.existsSync(fullFileRoute)) response.pipe(file_system.createWriteStream(fullFileRoute))
+                                }); 
                                 
-                            }); 
-                            if(!componentStatus) messages("success",`Se creo el componente ${componentName} con éxito`); componentStatus = true;
+                        })
+                        
                        
                     })
                 })
@@ -157,50 +176,106 @@ var modulesConfig = function(){
     });
     
 }
-if(!isFolder) principalFolders();
 
+//principalFolders();
+function initProyect(done){
+    principalFolders(); 
+    done();
+}
 
-// gulp.task('components',async ()=>{
-//     inquirer
-//     .prompt([
-//         {
-//             type: 'checkbox',
-//             message: 'Select components',
-//             name: 'components',
-//             choices: [
-//                 {
-//                 name: 'Custom Inputs',
-//                 },
-//                 {
-//                 name: 'Sliders',
-//                 },
-//                 {
-//                 name: 'Modals',
-//                 }
-//             ],
-//             validate: function (answer) {
-//                 if (answer.length < 1) {
-//                 return 'You must choose at least one topping.';
-//                 }
-
-//                 return true;
-//             },
-//         },
-//     ])
-//     .then((answers) => {
-//         console.log(JSON.stringify(answers, null, '  '));
-//         modulesConfig();
-//     });
+function reload() {
+    browserSync.init({
+      port: 3000,
+      server:  './dist'
+    });
+  }
+gulp.task('pug',function(){
     
-// })
-// //     sass.compiler = require('node-sass');
+    let isSuccess =  true;
+    return (
+        gulp.src('src/pug/pages/*.pug')
+        .pipe(pug({
+            pretty: true
+        }))
+        .pipe(pug().on('error', err => {
+            isSuccess = false;
+            messages("error",err.formatted)
+        }))
+        .pipe(gulp.dest('./dist'))
+        .on('end', ()=> {
+            browserSync.reload
+            if( isSuccess )
+                messages("success",'pug is html now!')
+        })
+        .on('end', browserSync.reload)
+    )
+})
 
-    gulp.task('sass',() =>{
-        gulp.src('./src/**/*.scss')
-            .pipe(sass().on('error', sass.logError))
-            .pipe(gulp.dest('./css'));
-    })
+gulp.task('assets',function(){
+    let isSuccess =  true;
+    return (
+        gulp.src("src/assets/js/**/*.js")
+            .pipe(gulp.dest('./dist/assets/js'))
+            .pipe(browserSync.stream())
+            .on('error', err => {
+                isSuccess = false;
+                messages("error",err.formatted)
+            })
+            .on('end', ()=> {
+                if( isSuccess )
+                    messages("success",'JS task complete')
+            })
+        )
+})
+// function views() {
+//     return (
+//       gulp.src('src/pug/pages/**/*.pug')
+//       .pipe(pug({
+//           pretty: true,
+//           locals: configData
+//       }))
+//       .pipe(gulp.dest(configData.is_develop ? './local' : './dist'))
+//       .on('end', browserSync.reload)
+//     )
+// }
 
-   gulp.task('sass:watch', () =>{
-       gulp.watch('./src/**/*.scss',gulp.series(['sass']));
-   })
+gulp.task('sass',function() {
+    let isSuccess =  true;
+    return  gulp.src('./src/assets/scss/controllers/*.scss')
+            .pipe(sass().on('error', err => {
+                isSuccess = false;
+                messages("error",err.formatted)
+            }))
+            .pipe(rename(function (path) {
+                // Updates the object in-place
+                path.dirname += "/assets/css/controllers";
+                path.extname = ".css";
+              }))
+            .pipe(gulp.dest('dist/'))
+            .pipe(browserSync.stream())
+            .on('end', ()=> {
+                if( isSuccess )
+                    messages("success",'Styles task complete')
+            });
+    
+})
+    // gulp.task('sass');
+    // gulp.task('sass', function() {
+
+    //     return gulp.src('./public_html/lib/sass/main.scss')
+    //         .pipe(sass()).on("error", sass.logError)
+    //         .pipe(gulp.dest('./public_html/css'))
+    //         //.pipe(reload({ stream:true }));
+    // });
+
+function watchElements(done){
+    gulp.watch('./src/assets/scss/**/*', gulp.series('sass'));
+    gulp.watch('src/assets/js/**/*', gulp.series('assets'));
+    gulp.watch('./src/pug/pages/*.pug', gulp.series('pug'));
+    browserSync.reload;
+    done()
+}
+
+//gulp.task("watchElements", watchElements)
+gulp.task("default", gulp.series(gulp.parallel(initProyect,'sass','pug','assets'),watchElements,reload))
+// gulp.task("default", gulp.series(initProyect))

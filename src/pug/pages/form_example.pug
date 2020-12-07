@@ -1,0 +1,80 @@
+extends ../layout/default_layout.pug
+include ../components/_loader.pug
+include ../components/_input.pug
+include ../components/_select.pug
+include ../components/_radio_checks.pug
+include ../components/_textarea.pug
+
+append styles
+    link(rel="stylesheet", href="assets/css/controllers/default.controller.css")
+block content
+    ul.DS__container--assets(type="link")
+        li {{https://fonts.googleapis.com/css2?family=Quicksand&display=swap"}}
+        li {{https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap"}}
+        li {{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}}
+        li {{assets/css/controllers/form.controller.css}}
+    section
+        .container
+            h1 Probando system design
+            form(action="" method="GET")
+                fieldset
+                    .clearBoth
+                        +_input({
+                            name: "Nombre",
+                            id:"id1",
+                            labelText: "Name <strong>prueba sd</strong>",
+                            class:"customizeInput customClass",
+                            type:"text",
+                            value:""
+                        })
+                    .clearBoth
+                        +_select({
+                            name: "select",
+                            id:"id2",
+                            class:"especialSelect slk",
+                            arrowClass:"fa fa-sort-down"
+                        })
+                            option(value="") Selecciona
+                            option(value="1") 1
+                            option(value="2") 2
+                            option(value="3") 3
+                fieldset
+                    .clearBoth
+                        +_radio_check({
+                            name: "check",
+                            id:"check",
+                            text: "ejemplo de checkbox <a href='#' class='strong'>link</a>",
+                            class:"espSel",
+                            type:"checkbox"
+                        })
+                    .clearBoth
+                        +_radio_check({
+                            name: "radio1",
+                            id:"radios",
+                            text: "ejemplo de radio <a href='#' class='strong'>link</a>",
+                            class:"",
+                            type:"radio"
+                        })
+                    .clearBoth
+                        +_radio_check({
+                            name: "radio1",
+                            id:"radios2",
+                            text: "ejemplo de radio2 <a href='#' class='strong'>link</a>",
+                            class:"",
+                            type:"radio"
+                        })
+                fieldset
+                    .clearBoth
+                        +_textarea({
+                            name: "txt",
+                            id:"txt_area",
+                            text: "ejemplo de textarea <strong> laosj </strong>",
+                            class:"customizeInput",
+                        })
+    +_loader({
+      class: "loaderClassSpecial"
+    })
+    ul.DS__container--assets(type="module")
+        li {{assets/js/controllers/form.controller.js}}
+append scripts
+    script(src="assets/js/controllers/default.controller.js")   

@@ -4,6 +4,10 @@
         "folders":{
             "dev":{
                 "name": "src",
+                "pug":{
+                    "pages":{},
+                    "components":{}
+                },
                 "assets":{
                     "scss":{
                         "type": "sass",
