@@ -1,10 +1,14 @@
 {
     "moduls":{
         "custom_inputs":{
-            "js": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/js/customInputs.js",
+            "js": {
+                "_select":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/js/components/_select.js",
+                "_radio_checks":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/js/components/_radio_checkbox.js",
+                "_general":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/js/components/_general_inputs.js"
+            },
             "scss":{
                 "_input":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/components/_general_items.scss",
-                "_radio_checks":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/components/_checkbox_radio.scss",
+                "_radio_checks":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/components/_radio_checkbox.scss",
                 "_select": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/components/_select.scss",
                 "_general" :"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_textarea.pug"
             },
@@ -16,8 +20,12 @@
             }
         },
         "custom_loader":{
-            "js":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/js/customloader.js",
-            "scss":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/scss/utils/_loaderCustomize.scss",
+            "js":{
+                "_loader":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/js/customloader.js"
+            },
+            "scss":{
+                "_loader": "https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/scss/utils/_loaderCustomize.scss"
+            },
             "pug": {
                 "_loader": "https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/pug/mixins/_loader.pug"
             }
