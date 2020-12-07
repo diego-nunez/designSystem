@@ -2,7 +2,25 @@
     "moduls":{
         "custom_inputs":{
             "js": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/js/customInputs.js",
-            "scss": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/utils/_inputsCustomize.scss"
+            "scss":{
+                "_input":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/components/_general_items.scss",
+                "_radio_checks":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/components/_checkbox_radio.scss",
+                "_select": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/assets/scss/components/_select.scss",
+                "_general" :"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_textarea.pug"
+            },
+            "pug": {
+                "_input":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_input.pug",
+                "_radio_checks":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_radio_checks.pug",
+                "_select": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_select.pug",
+                "_textarea" :"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_textarea.pug"
+            }
+        },
+        "custom_loader":{
+            "js":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/js/customloader.js",
+            "scss":"https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/assets/scss/utils/_loaderCustomize.scss",
+            "pug": {
+                "_loader": "https://raw.githubusercontent.com/rocioOrtiz/components/main/loader/src/pug/mixins/_loader.pug"
+            }
         }
     }
 }
