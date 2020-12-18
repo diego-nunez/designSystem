@@ -26,7 +26,7 @@ fieldset{
 }
 
 input, textarea{
-    border: 1px solid gray;
+    border: 1px solid red;
     width: 100%;
   }
   
@@ -47,4 +47,18 @@ margin: 0 0 30px;
 h1{
     font-family: 'Do Hyeon', sans-serif;
     font-size: 40px;
+}
+
+input[type="submit"]{
+    height: 40px;
+    font-size: 16px;
+    background: #3ea2a2;
+    color: white;
+    border: 0 none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.specialSelect{
+    background: #e3e3e3;
 }

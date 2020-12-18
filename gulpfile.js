@@ -193,7 +193,7 @@ gulp.task('pug',function(){
     
     let isSuccess =  true;
     return (
-        gulp.src('src/pug/pages/*.pug')
+        gulp.src(['src/pug/pages/*.pug','src/pug/*.pug'])
         .pipe(pug({
             pretty: true
         }))
@@ -203,11 +203,10 @@ gulp.task('pug',function(){
         }))
         .pipe(gulp.dest('./dist'))
         .on('end', ()=> {
-            browserSync.reload
+            browserSync.reload()
             if( isSuccess )
                 messages("success",'pug is html now!')
         })
-        .on('end', browserSync.reload)
     )
 })
 
@@ -215,6 +214,9 @@ gulp.task('assets',function(){
     let isSuccess =  true;
     return (
         gulp.src("src/assets/js/**/*.js")
+            .pipe(babel({
+                presets: ['@babel/env']
+            }))
             .pipe(gulp.dest('./dist/assets/js'))
             .pipe(browserSync.stream())
             .on('error', err => {
@@ -252,9 +254,9 @@ gulp.task('sass',function() {
                 path.extname = ".css";
               }))
             .pipe(gulp.dest('dist/'))
-            .pipe(browserSync.stream())
             .on('end', ()=> {
                 if( isSuccess )
+                browserSync.reload()
                     messages("success",'Styles task complete')
             });
     
@@ -271,8 +273,8 @@ gulp.task('sass',function() {
 function watchElements(done){
     gulp.watch('./src/assets/scss/**/*', gulp.series('sass'));
     gulp.watch('src/assets/js/**/*', gulp.series('assets'));
-    gulp.watch('./src/pug/pages/*.pug', gulp.series('pug'));
-    browserSync.reload;
+    gulp.watch('./src/pug/**/*.pug', gulp.series('pug'));
+    browserSync.reload()
     done()
 }
 
