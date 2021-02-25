@@ -18,17 +18,36 @@
   },
   "homepage": "https://github.com/rocioOrtiz/designSystem#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
     "browser-sync": "^2.26.13",
-    "gulp": "^4.0.2",
-    "gulp-live-server": "0.0.31"
+    "gulp-live-server": "0.0.31",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^3.11.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
+    "@babel/preset-react": "^7.12.10",
+    "babel-core": "^7.0.0-0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babelify": "^10.0.0",
+    "browserify": "^17.0.0",
+    "bulkify": "^1.4.2",
     "colors": "^1.4.0",
+    "es2015": "0.0.0",
+    "glob": "^7.1.6",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^7.0.1",
+    "gulp-minify": "^3.1.0",
     "gulp-prompt": "^1.2.0",
     "gulp-pug": "^4.0.1",
     "gulp-rename": "^2.0.0",
     "gulp-sass": "^4.1.0",
+    "gulp-uglify": "^3.0.2",
     "inquirer": "^7.3.3",
-    "node-sass": "^5.0.0"
+    "merge-stream": "^2.0.0",
+    "node-sass": "^5.0.0",
+    "vinyl-buffer": "^1.0.1"
   }
 }

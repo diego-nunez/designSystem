@@ -14,7 +14,15 @@ var gulp = require('gulp'),
     config_info = {},
     foldersRoutes = [],
     https = require('https'),
-    browserSync = require('browser-sync').create();
+    browserSync = require('browser-sync').create(),
+    browserify = require("browserify"),
+    watchify = require('watchify'),
+    source = require('vinyl-source-stream'),
+    buffer = require("vinyl-buffer"),
+    babel = require('babelify'),
+    glob = require('glob'),
+    merge = require('merge-stream'),
+    uglify = require("gulp-uglify");
 
     sass.compiler = require('node-sass');
 
@@ -197,10 +205,6 @@ gulp.task('pug',function(){
         .pipe(pug({
             pretty: true
         }))
-        .pipe(pug().on('error', err => {
-            isSuccess = false;
-            messages("error",err.formatted)
-        }))
         .pipe(gulp.dest('./dist'))
         .on('end', ()=> {
             browserSync.reload()
@@ -210,14 +214,72 @@ gulp.task('pug',function(){
     )
 })
 
+gulp.task('js',function(){
+    let isSuccess =  true,
+        files = glob.sync('src/assets/js/controllers/*.js');
+        return merge(files.map(function(file) {
+            let entriesFiles = [file],
+                defaultFile = (file == 'src/assets/js/controllers/default.controller.js')? entriesFiles.unshift(require.resolve('babel-polyfill')):'';
+            
+            return browserify({
+                // entries: [ require.resolve('babel-polyfill'),file],
+                entries: entriesFiles,
+                debug: true
+            }).transform(babel,{
+                        ignore: [/\/node_modules\/(?!@vizuaalog\/)/],     
+                        presets: [ 
+                            "@babel/preset-env",
+                            "@babel/preset-react"] 
+              
+                    })
+                .bundle()
+                .pipe(source(path.basename(file, '.js') + ".js"))
+                .pipe(buffer())
+	
+                // And uglify
+        
+                // .pipe(uglify())
+                .pipe(gulp.dest("dist/assets/js/controllers/"))
+          }));
+   
+    // var bundler = watchify(browserify('src/assets/js/controllers/form.controller.js', {mode:'hash',resolve: ['path-reduce', 'strip-ext'], debug: true })
+    //     .transform(babel,{
+    //         ignore: [/\/node_modules\/(?!@vizuaalog\/)/],     
+    //         presets: [ 
+    //             "@babel/preset-env",
+    //             "@babel/preset-react"] 
+  
+    //     }));
+    // return (
+    //     // gulp.src("src/assets/js/**/*")
+    //     //     .pipe(babel({
+    //     //         presets: ['env']
+    //     //     }))
+    //     //     .pipe(gulp.dest('./dist/assets/js'))
+    //     //     .pipe(browserSync.stream())
+    //     //     .on('error', err => {
+    //     //         isSuccess = false;
+    //     //         messages("error",err.formatted)
+    //     //     })
+    //     //     .on('end', ()=> {
+    //     //         if( isSuccess )
+    //     //             messages("success",'JS task complete')
+    //     //     })
+    //     // )
+        
+    //     bundler.bundle()
+    //         .on('error', function(err) { console.error(err); this.emit('end'); })
+    //         .pipe(source('form.controller.js'))
+    //         // .pipe(buffer())
+    //         .pipe(gulp.dest('./dist/'))
+    // )
+})
+
 gulp.task('assets',function(){
     let isSuccess =  true;
     return (
-        gulp.src("src/assets/js/**/*.js")
-            .pipe(babel({
-                presets: ['@babel/env']
-            }))
-            .pipe(gulp.dest('./dist/assets/js'))
+        gulp.src(["src/assets/**","!src/assets/js/**/*", "!src/assets/scss/**/*"])
+            .pipe(gulp.dest('./dist/assets/'))
             .pipe(browserSync.stream())
             .on('error', err => {
                 isSuccess = false;
@@ -225,7 +287,7 @@ gulp.task('assets',function(){
             })
             .on('end', ()=> {
                 if( isSuccess )
-                    messages("success",'JS task complete')
+                    messages("success",'assets task complete')
             })
         )
 })
@@ -272,12 +334,13 @@ gulp.task('sass',function() {
 
 function watchElements(done){
     gulp.watch('./src/assets/scss/**/*', gulp.series('sass'));
-    gulp.watch('src/assets/js/**/*', gulp.series('assets'));
+    gulp.watch('src/assets/js/**/*', gulp.series('js'));
     gulp.watch('./src/pug/**/*.pug', gulp.series('pug'));
+    gulp.watch('src/assets/**', gulp.series('assets'));
     browserSync.reload()
     done()
 }
 
 //gulp.task("watchElements", watchElements)
-gulp.task("default", gulp.series(gulp.parallel(initProyect,'sass','pug','assets'),watchElements,reload))
+gulp.task("default", gulp.series(gulp.parallel(initProyect,'sass','pug','js','assets'),watchElements,reload))
 // gulp.task("default", gulp.series(initProyect))

@@ -16,7 +16,8 @@
                 "_input":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_input.pug",
                 "_radio_checks":"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_radio_checks.pug",
                 "_select": "https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_select.pug",
-                "_textarea" :"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_textarea.pug"
+                "_textarea" :"https://raw.githubusercontent.com/rocioOrtiz/customInputs/main/src/pug/mixins/_textarea.pug",
+                "layout" : ""
             }
         },
         "custom_loader":{

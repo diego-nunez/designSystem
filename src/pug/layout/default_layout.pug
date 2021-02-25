@@ -1,11 +1,24 @@
-<!DOCTYPE html>
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title Document
-        block styles
-    body
-        main
-            block content
-            block scripts
+- blocks = { }
+block vars
+include ../template/_head
+include ../components/_loader.pug
+
+body
+  //- Se crea la lista de scripts y hojas de estilos, no quitar
+  ul.DS__container--assets
+    for link in externalResourceLink
+      li {{[[#{link.type}]]#{link.resource}}}
+
+  include ../template/_header
+  main
+    block content
+  include ../template/_footer
+
+  //- Incluye el loader, no quitar
+  +_loader({
+    class: "loaderClassSpecial"
+  })
+
+  //- Script que agrega las hojas de estilo y scripts, no quitar
+  script(src="assets/js/controllers/default.controller.js")
+
